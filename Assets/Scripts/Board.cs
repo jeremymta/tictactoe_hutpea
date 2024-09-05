@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,18 +10,12 @@ public class Board : MonoBehaviour
 
     public int boardSize;
     public string currentTurn = "x";
-    private string[,] matrix;
-
-    private void Awake()
-    {
-        
-    }
+    public string[,] matrix;
 
     public void Start()
     {
         matrix = new string[boardSize + 1, boardSize + 1];
         gridLayout.constraintCount = boardSize;
-
         CreateBoard();
     }
 
@@ -41,6 +32,12 @@ public class Board : MonoBehaviour
                 matrix[i, j] = "";
             }
         }
+    }
+
+    public bool CanPlay(int row, int column)
+    {
+        //Ktra neu o trong, thi tra ve true (nguoi choi co the danh)
+        return matrix[row, column] == "";
     }
 
     public bool Check(int row, int column)

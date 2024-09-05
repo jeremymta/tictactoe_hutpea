@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,20 +43,28 @@ public class Cell : MonoBehaviour
 
     public void OnClick()
     {
+        if (!board.CanPlay(this.row, this.column)) return;
+
         ChangeImage(board.currentTurn);
+
+        board.matrix[this.row, this.column] = board.currentTurn;
+  
+        //Ktra ket thuc
         if (board.Check(this.row, this.column))
         {
             GameObject window = Instantiate(gameOverWindow, canvas);
             window.GetComponent<GameOverWindow>().SetName(board.currentTurn);
         }
-        if (board.currentTurn == "x")
-        {
-            board.currentTurn = "o";
-        }
-        else
-        {
-            board.currentTurn = "x";
-        }
 
+        //Chuyen luot
+        //if (board.currentTurn == "x")
+        //{
+        //    board.currentTurn = "o";
+        //}
+        //else
+        //{
+        //    board.currentTurn = "x";
+        //}
+        board.currentTurn = board.currentTurn == "x" ? "o" : "x";
     }
 }
