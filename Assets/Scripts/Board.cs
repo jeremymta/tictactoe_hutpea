@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,48 @@ public class Board : MonoBehaviour
                 cell.row = i;
                 cell.column = j;
                 matrix[i, j] = "";
+            }
+        }
+    }
+
+    //Mo rong ba co neu nguoi choi danh vao ria
+    public void ExpandBoardIfNecessary(int row, int column)
+    {
+        if (row == 1 || row == boardSize || column == 1 || column == boardSize)
+        {
+            boardSize++;
+            string[,] newMatrix = new string[boardSize + 1, boardSize + 1];
+
+            //Sao chep du lieu cu vao ma tran moi
+            for (int i = 1; i <= boardSize - 1; i++)
+            {
+                for (int j = 1; j <= boardSize - 1; j++)
+                {
+                    newMatrix[i, j] = matrix[i, j];
+                }
+            }
+
+            matrix = newMatrix;
+            gridLayout.constraintCount = boardSize;
+            CreateNewCells(); // Them o moi
+        }
+    }
+
+    //Tao them cac o moi khi mo rong ban co
+    public void CreateNewCells()
+    {
+        for (int i = 1; i <= boardSize; i++)
+        {
+            for (int j = 1; j <= boardSize; j++)
+            {
+                if (matrix[i, j] == null)
+                {
+                    GameObject cellTransform = Instantiate(cellPrefab, board);
+                    Cell cell = cellTransform.GetComponent<Cell>();
+                    cell.row = i;
+                    cell.column = j;
+                    matrix[i, j] = ""; // Khoi tao gtri la chuoi rong
+                }
             }
         }
     }

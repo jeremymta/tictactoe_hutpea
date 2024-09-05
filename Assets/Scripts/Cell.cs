@@ -45,11 +45,13 @@ public class Cell : MonoBehaviour
     {
         if (!board.CanPlay(this.row, this.column)) return;
 
+        board.ExpandBoardIfNecessary(this.row, this.column);
+
         ChangeImage(board.currentTurn);
 
         board.matrix[this.row, this.column] = board.currentTurn;
   
-        //Ktra ket thuc
+        //Ktra ket thuc tran dau
         if (board.Check(this.row, this.column))
         {
             GameObject window = Instantiate(gameOverWindow, canvas);
