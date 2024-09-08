@@ -12,6 +12,7 @@ public class Board : MonoBehaviour
     public int boardSize;
     public string currentTurn = "x";
     public string[,] matrix;
+    public System.Collections.Generic.List<GameObject> lst_cell;
 
     public void Start()
     {
@@ -31,6 +32,7 @@ public class Board : MonoBehaviour
                 cell.row = i;
                 cell.column = j;
                 matrix[i, j] = "";
+                lst_cell.Add(cellTransform);
             }
         }
     }
@@ -54,7 +56,37 @@ public class Board : MonoBehaviour
 
             matrix = newMatrix;
             gridLayout.constraintCount = boardSize;
-            CreateNewCells(); // Them o moi
+            for(int i = 0; i < lst_cell.Count; i++)
+            {
+                Destroy(lst_cell[i]);
+                //lst_cell.RemoveAt(i);
+            }
+            //CreateNewCells(); // Them o moi
+            ReRenderBoard();
+        }
+    }
+
+    public void ReRenderBoard()
+    {
+        for (int i = 1; i <= boardSize; i++)
+        {
+            for (int j = 1; j <= boardSize; j++)
+            {
+                if (matrix[i, j] == null)
+                {
+                    matrix[i, j] = "";
+                }
+                GameObject cellTransform = Instantiate(cellPrefab, board);
+                Cell cell = cellTransform.GetComponent<Cell>();
+                cell.row = i;
+                cell.column = j;
+                if (matrix[i, j] != "")
+                {
+                    Debug.Log("ReRenderBoard " + matrix[i, j] + " " + i + " " + j);
+                }
+                cell.ChangeImage(matrix[i, j]);
+                lst_cell.Add(cellTransform);
+            }
         }
     }
 
@@ -80,6 +112,7 @@ public class Board : MonoBehaviour
     public bool CanPlay(int row, int column)
     {
         //Ktra neu o trong, thi tra ve true (nguoi choi co the danh)
+        Debug.Log("CanPlay " + matrix[row, column]);
         return matrix[row, column] == "";
     }
 

@@ -31,25 +31,28 @@ public class Cell : MonoBehaviour
 
     public void ChangeImage(string s)
     {
+        if (s == "") return;
         if (s == "x")
         {
             image.sprite = xSprite;
         }
-        else
+        else if (s == "o")
         {
             image.sprite = oSprite;
         }
+        Debug.Log("OnClick " + s);
+
     }
 
     public void OnClick()
     {
         if (!board.CanPlay(this.row, this.column)) return;
 
-        board.ExpandBoardIfNecessary(this.row, this.column);
+        board.matrix[this.row, this.column] = board.currentTurn;
 
         ChangeImage(board.currentTurn);
 
-        board.matrix[this.row, this.column] = board.currentTurn;
+        board.ExpandBoardIfNecessary(this.row, this.column);
   
         //Ktra ket thuc tran dau
         if (board.Check(this.row, this.column))
