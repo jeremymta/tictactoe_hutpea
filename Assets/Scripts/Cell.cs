@@ -40,7 +40,7 @@ public class Cell : MonoBehaviour
         {
             image.sprite = oSprite;
         }
-        Debug.Log("OnClick " + s);
+        //Debug.Log("OnClick " + s);
 
     }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,34 +37,132 @@ public class Board : MonoBehaviour
         }
     }
 
-    //Mo rong ba co neu nguoi choi danh vao ria
+    ////Mo rong ban co neu nguoi choi danh vao ria
+    //public void ExpandBoardIfNecessary(int row, int column)
+    //{
+    //    if (row == 1 || row == boardSize || column == 1 || column == boardSize)
+    //    {
+    //        boardSize++;
+    //        string[,] newMatrix = new string[boardSize + 1, boardSize + 1];
+
+    //        //Sao chep du lieu cu vao ma tran moi
+    //        for (int i = 1; i <= boardSize - 1; i++)
+    //        {
+    //            for (int j = 1; j <= boardSize - 1; j++)
+    //            {
+    //                newMatrix[i, j] = matrix[i, j];
+    //            }
+    //        }
+
+    //        matrix = newMatrix;
+    //        gridLayout.constraintCount = boardSize;
+    //        for (int i = 0; i < lst_cell.Count; i++)
+    //        {
+    //            Destroy(lst_cell[i]);
+    //            //lst_cell.RemoveAt(i);
+    //        }
+    //        //CreateNewCells(); // Them o moi
+    //        ReRenderBoard();
+    //    }
+    //}
+
     public void ExpandBoardIfNecessary(int row, int column)
     {
-        if (row == 1 || row == boardSize || column == 1 || column == boardSize)
+        bool expanded = false; // Biến để theo dõi xem có mở rộng hay không
+
+        // Kiểm tra nếu người chơi đánh vào rìa bên trên
+        if (row == 1)
         {
             boardSize++;
+            expanded = true;
             string[,] newMatrix = new string[boardSize + 1, boardSize + 1];
 
-            //Sao chep du lieu cu vao ma tran moi
+            // Sao chép ma trận cũ và mở rộng thêm hàng trên
             for (int i = 1; i <= boardSize - 1; i++)
             {
                 for (int j = 1; j <= boardSize - 1; j++)
                 {
-                    newMatrix[i, j] = matrix[i, j];
+                    newMatrix[i + 1, j] = matrix[i, j]; // Dịch xuống 1 hàng để thêm hàng trên
                 }
             }
 
             matrix = newMatrix;
-            gridLayout.constraintCount = boardSize;
-            for(int i = 0; i < lst_cell.Count; i++)
+        }
+
+        // Kiểm tra nếu người chơi đánh vào rìa bên dưới
+        if (row == boardSize)
+        {
+            boardSize++;
+            expanded = true;
+            string[,] newMatrix = new string[boardSize + 1, boardSize + 1];
+
+            // Sao chép ma trận cũ và mở rộng thêm hàng dưới
+            for (int i = 1; i <= boardSize - 1; i++)
             {
-                Destroy(lst_cell[i]);
-                //lst_cell.RemoveAt(i);
+                for (int j = 1; j <= boardSize - 1; j++)
+                {
+                    newMatrix[i, j] = matrix[i, j]; // Giữ nguyên vị trí các hàng hiện tại
+                }
             }
-            //CreateNewCells(); // Them o moi
+
+            matrix = newMatrix;
+        }
+
+        // Kiểm tra nếu người chơi đánh vào rìa bên trái
+        if (column == 1)
+        {
+            boardSize++;
+            expanded = true;
+            string[,] newMatrix = new string[boardSize + 1, boardSize + 1];
+
+            // Sao chép ma trận cũ và mở rộng thêm cột trái
+            for (int i = 1; i <= boardSize - 1; i++)
+            {
+                for (int j = 1; j <= boardSize - 1; j++)
+                {
+                    newMatrix[i, j + 1] = matrix[i, j]; // Dịch phải 1 cột để thêm cột trái
+                }
+            }
+
+            matrix = newMatrix;
+        }
+
+        // Kiểm tra nếu người chơi đánh vào rìa bên phải
+        if (column == boardSize)
+        {
+            boardSize++;
+            expanded = true;
+            string[,] newMatrix = new string[boardSize + 1, boardSize + 1];
+
+            // Sao chép ma trận cũ và mở rộng thêm cột phải
+            for (int i = 1; i <= boardSize - 1; i++)
+            {
+                for (int j = 1; j <= boardSize - 1; j++)
+                {
+                    newMatrix[i, j] = matrix[i, j]; // Giữ nguyên vị trí các cột hiện tại
+                }
+            }
+
+            matrix = newMatrix;
+        }
+
+        // Nếu đã mở rộng bàn cờ, cần tái tạo lại giao diện
+        if (expanded)
+        {
+            gridLayout.constraintCount = boardSize;
+
+            // Xóa tất cả các ô cũ
+            for (int i = 0; i < lst_cell.Count; i++)
+            {
+                Destroy(lst_cell[i]); // Xóa từng ô trong danh sách
+            }
+            lst_cell.Clear(); // Xóa toàn bộ danh sách sau khi đã phá hủy các ô
+
+            // Tạo lại toàn bộ bàn cờ sau khi mở rộng
             ReRenderBoard();
         }
     }
+
 
     public void ReRenderBoard()
     {
@@ -90,29 +188,29 @@ public class Board : MonoBehaviour
         }
     }
 
-    //Tao them cac o moi khi mo rong ban co
-    public void CreateNewCells()
-    {
-        for (int i = 1; i <= boardSize; i++)
-        {
-            for (int j = 1; j <= boardSize; j++)
-            {
-                if (matrix[i, j] == null)
-                {
-                    GameObject cellTransform = Instantiate(cellPrefab, board);
-                    Cell cell = cellTransform.GetComponent<Cell>();
-                    cell.row = i;
-                    cell.column = j;
-                    matrix[i, j] = ""; // Khoi tao gtri la chuoi rong
-                }
-            }
-        }
-    }
+    ////Tao them cac o moi khi mo rong ban co
+    //public void CreateNewCells()
+    //{
+    //    for (int i = 1; i <= boardSize; i++)
+    //    {
+    //        for (int j = 1; j <= boardSize; j++)
+    //        {
+    //            if (matrix[i, j] == null)
+    //            {
+    //                GameObject cellTransform = Instantiate(cellPrefab, board);
+    //                Cell cell = cellTransform.GetComponent<Cell>();
+    //                cell.row = i;
+    //                cell.column = j;
+    //                matrix[i, j] = ""; // Khoi tao gtri la chuoi rong
+    //            }
+    //        }
+    //    }
+    //}
 
     public bool CanPlay(int row, int column)
     {
         //Ktra neu o trong, thi tra ve true (nguoi choi co the danh)
-        Debug.Log("CanPlay " + matrix[row, column]);
+        //Debug.Log("CanPlay " + matrix[row, column]);
         return matrix[row, column] == "";
     }
 
